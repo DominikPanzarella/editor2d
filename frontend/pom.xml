@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>ch.supsi.editor2d</groupId>
+    <artifactId>frontend</artifactId>
+    <version>1.0</version>
+
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <timestamp>${maven.build.timestamp}</timestamp>
+        <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
+        <!--suppress UnresolvedMavenProperty -->
+        <devs>Dominik Panzarella,dominik.panzarella@student.supsi.ch - Alessandro Spagnuolo,alessandro.spagnuolo@student.supsi.ch - Mattia Mancino,mattia.mancino@student.supsi.ch</devs>
+        <shortcuts>About,Ctrl+A - Clear,Ctrl+D - Exit,Ctrl+X - Save,Ctrl+S - Open,Ctrl+O - Redo,Ctrl+N - Undo,Ctrl+P - Run,Ctrl+R - ZoomIn,Ctrl+I - ZoomOut,Ctrl+O</shortcuts>
+    </properties>
+
+    <developers>
+        <developer>
+            <id>dominik</id>
+            <name>Dominik Panzarella</name>
+            <email>dominik.panzarella@student.supsi.ch</email>
+        </developer>
+        <developer>
+            <id>alessandro</id>
+            <name>Alessandro Spagnuolo</name>
+            <email>alessandro.spagnuolo@student.supsi.ch</email>
+        </developer>
+        <developer>
+            <id>mattia</id>
+            <name>Mattia Mancino</name>
+            <email>mattia.mancino@student.supsi.ch</email>
+        </developer>
+    </developers>
+
+
+    <dependencies>
+        <dependency>
+            <groupId>ch.supsi.editor2d</groupId>
+            <artifactId>backend</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>21</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-fxml</artifactId>
+            <version>21</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.11.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>ch.supsi.editor2d</groupId>
+            <artifactId>backend</artifactId>
+            <version>1.0</version>
+            <scope>compile</scope>
+        </dependency>
+
+    </dependencies>
+    <build>
+        <finalName>2dEditor</finalName>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.6.0</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>ch.supsi.editor2d.Main</mainClass>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                        </manifest>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.3.1</version>
+                <configuration>
+                    <!-- altre configurazioni se necessarie -->
+                    <resources>
+                        <resource>
+                            <directory>src/main/resources</directory>
+                            <filtering>true</filtering>
+                        </resource>
+                    </resources>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.5.1</version>
+            </plugin>
+        </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+
+    </build>
+</project>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.TextFlow?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1"  style="-fx-border-color: c5c6c7;">
+    <ScrollPane fx:id="scrollPane" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" maxHeight="40" style="-fx-background-color: lightblue;">
+        <content>
+            <TextFlow maxHeight="40">
+                <padding>
+                    <Insets right="11" bottom="5" left="11" top="5"/>
+                </padding>
+                <Text fx:id="infobarText" />
+            </TextFlow>
+        </content>
+    </ScrollPane>
+</AnchorPane>
+

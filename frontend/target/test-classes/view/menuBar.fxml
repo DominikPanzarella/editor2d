@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+
+<MenuBar xmlns:fx="http://javafx.com/fxml/1">
+    <Menu fx:id="fileMenu" text="File">
+        <MenuItem fx:id="openMenuItem" mnemonicParsing="false" text="%label.open"/>
+        <MenuItem fx:id="exportMenuItem" mnemonicParsing="false" text="%label.export"/>
+        <MenuItem fx:id="exitMenuItem" text="%label.exit" />
+    </Menu>
+    <Menu fx:id="editMenu" mnemonicParsing="false" text="Edit">
+        <Menu fx:id="changeLanguageMenu" mnemonicParsing="false" text="%label.changeLanguage">
+            <MenuItem fx:id="enUSMenuItem" mnemonicParsing="false" text="%label.enUS"/>
+            <MenuItem fx:id="itCHMenuItem" mnemonicParsing="false" text="%label.itCH"/>
+        </Menu>
+        <MenuItem fx:id="runPipelineMenuItem" mnemonicParsing="false" text="%label.runPipeline"/>
+        <MenuItem fx:id="undoMenuItem" mnemonicParsing="false" text="%label.undo"/>
+        <MenuItem fx:id="redoMenuItem" mnemonicParsing="false" text="%label.redo"/>
+        <MenuItem fx:id="zoomInMenuItem" mnemonicParsing="false" text="%label.zoomIn"/>
+        <MenuItem fx:id="zoomOutMenuItem" mnemonicParsing="false" text="%label.zoomOut"/>
+    </Menu>
+    <Menu fx:id="helpMenu" mnemonicParsing="false" text="%label.help">
+        <MenuItem fx:id="aboutMenuItem" mnemonicParsing="false" text="%label.about"/>
+        <MenuItem fx:id="moreInfoMenuItem" mnemonicParsing="false" text="%label.moreInfo"/>
+    </Menu>
+</MenuBar>

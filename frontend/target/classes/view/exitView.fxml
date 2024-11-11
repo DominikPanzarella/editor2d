@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<?import javafx.scene.text.Font?>
+<?import javafx.geometry.Insets?>
+<BorderPane fx:id="exitDialog" minWidth="350.0" style="-fx-padding: 10px;" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1">
+    <top>
+        <Pane prefHeight="20.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <children>
+                <Label text="%label.exitView.title">
+                    <font>
+                        <Font name="Arial Bold" size="16.0" />
+                    </font>
+                </Label>
+                <Separator layoutX="-6.0" layoutY="19.0" prefWidth="300.0" />
+            </children>
+            <BorderPane.margin>
+                <Insets bottom="10.0" />
+            </BorderPane.margin>
+        </Pane>
+    </top>
+    <center>
+        <VBox BorderPane.alignment="CENTER">
+            <children>
+                <Pane>
+                    <children>
+                        <Label text="%label.exitView.text">
+                            <font>
+                                <Font name="Arial" size="13.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </Pane>
+                <BorderPane>
+                    <right>
+                        <HBox spacing="10.0" BorderPane.alignment="CENTER">
+                            <BorderPane.margin>
+                                <Insets top="10.0" />
+                            </BorderPane.margin>
+                            <children>
+                                <Button fx:id="cancelButton" mnemonicParsing="false" style="-fx-background-color: #DE1A1A#DE1A1A;" text="%label.exitView.cancel" textFill="WHITE">
+                                    <font>
+                                        <Font size="13.0" />
+                                    </font>
+                                </Button>
+                                <Button fx:id="okButton" mnemonicParsing="false" style="-fx-background-color: #1983CA;" text="%label.exitView.ok" textFill="WHITE">
+                                    <font>
+                                        <Font size="13.0" />
+                                    </font>
+                                    <HBox.margin>
+                                        <Insets />
+                                    </HBox.margin>
+                                </Button>
+                            </children>
+                        </HBox>
+                    </right>
+                </BorderPane>
+            </children>
+        </VBox>
+    </center>
+</BorderPane>
+

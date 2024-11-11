@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: ch.supsi.editor2d.repository.reader.PPMReaderTest
+-------------------------------------------------------------------------------
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.004 s -- in ch.supsi.editor2d.repository.reader.PPMReaderTest
