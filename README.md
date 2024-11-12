@@ -59,7 +59,7 @@ cd backed && mvn clean install
 Create the jar file
 
 ```sh
-cd frontend && mvn clean package
+cd frontend && mvn clean install
 ```
 
 ## Usage
