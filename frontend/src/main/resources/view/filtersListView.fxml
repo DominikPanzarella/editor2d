@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane minWidth="-Infinity" prefHeight="600.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+   <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <top>
+         <AnchorPane maxHeight="50.0" prefHeight="34.0" prefWidth="300.0" style="-fx-background-color: dad8c9;" BorderPane.alignment="CENTER">
+            <Label fx:id="filtersListLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="132.0" layoutY="12.0" text="%label.filtersList" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+         </AnchorPane>
+      </top>
+      <center>
+         <AnchorPane fx:id="filtersContainerAnchorPane" prefHeight="550.0" prefWidth="300.0" BorderPane.alignment="CENTER">
+            <children>
+
+            </children>
+         </AnchorPane>
+      </center>
+   </BorderPane>
+</AnchorPane>
