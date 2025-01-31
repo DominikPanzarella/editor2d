@@ -9,14 +9,14 @@
     <version>1.0</version>
 
     <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <timestamp>${maven.build.timestamp}</timestamp>
         <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
         <!--suppress UnresolvedMavenProperty -->
         <devs>Dominik Panzarella,dominik.panzarella@student.supsi.ch - Alessandro Spagnuolo,alessandro.spagnuolo@student.supsi.ch - Mattia Mancino,mattia.mancino@student.supsi.ch</devs>
-        <shortcuts>About,Ctrl+A - Clear,Ctrl+D - Exit,Ctrl+X - Save,Ctrl+S - Open,Ctrl+O - Redo,Ctrl+N - Undo,Ctrl+P - Run,Ctrl+R - ZoomIn,Ctrl+I - ZoomOut,Ctrl+O</shortcuts>
+        <shortcuts>About,Ctrl+A - Clear,Ctrl+D - Exit,Ctrl+X - Save,Ctrl+S - Open,Ctrl+O - Redo,Ctrl+N - Undo,Ctrl+P - Run,Ctrl+R - ZoomIn,Ctrl+UP - ZoomOut,Ctrl+DOWN</shortcuts>
     </properties>
 
     <developers>
@@ -37,44 +37,82 @@
         </developer>
     </developers>
 
-
     <dependencies>
+        <!-- JavaFX Dependencies -->
         <dependency>
-            <groupId>ch.supsi.editor2d</groupId>
-            <artifactId>backend</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-base</artifactId>
+            <version>21</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-graphics</artifactId>
+            <version>21</version>
+        </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
             <version>21</version>
         </dependency>
-
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
             <version>21</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.11.2</version>
-            <scope>test</scope>
-        </dependency>
+        <!-- Backend Dependency -->
         <dependency>
             <groupId>ch.supsi.editor2d</groupId>
             <artifactId>backend</artifactId>
             <version>1.0</version>
-            <scope>compile</scope>
         </dependency>
 
+        <!-- Test Dependencies -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.11.3</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <version>5.2.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testfx</groupId>
+            <artifactId>testfx-junit5</artifactId>
+            <version>4.0.17</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testfx</groupId>
+            <artifactId>openjfx-monocle</artifactId>
+            <version>21.0.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-inline</artifactId>
+            <version>5.2.0</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
+
     <build>
         <finalName>2dEditor</finalName>
 
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.10.1</version>
+                <configuration>
+                    <release>17</release>
+                </configuration>
+            </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -101,12 +139,12 @@
                     </execution>
                 </executions>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>3.3.1</version>
                 <configuration>
-                    <!-- altre configurazioni se necessarie -->
                     <resources>
                         <resource>
                             <directory>src/main/resources</directory>
@@ -115,18 +153,24 @@
                     </resources>
                 </configuration>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.5.1</version>
+                <version>3.1.2</version>
+                <configuration>
+                    <reuseForks>false</reuseForks>
+                    <argLine>-Djava.awt.headless=true</argLine>
+                    <argLine>-Djdk.internal.lambda.dumpProxyClasses=</argLine>
+                </configuration>
             </plugin>
         </plugins>
+
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
             </resource>
         </resources>
-
     </build>
 </project>

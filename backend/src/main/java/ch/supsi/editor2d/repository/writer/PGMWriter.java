@@ -1,23 +1,22 @@
 package ch.supsi.editor2d.repository.writer;
 
-import ch.supsi.editor2d.repository.converter.ImageConverter;
-import ch.supsi.editor2d.repository.converter.PGMImageConverter;
-import ch.supsi.editor2d.service.model.ImageWrapper;
-import ch.supsi.editor2d.service.model.PGMImageWrapper;
-import ch.supsi.editor2d.service.model.PixelWrapper;
+import ch.supsi.editor2d.service.model.*;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
 
 public class PGMWriter extends PNMWriter {
-    private final ImageConverter<PGMImageWrapper> converter = new PGMImageConverter<>();
 
+    private PGMImageWrapper toSavePGM;
     @Override
     protected boolean setHeader(BufferedWriter writer, ImageWrapper toSave) throws IOException {
-        String magicNumber = "p2";
+        PPMImageWrapper data = (PPMImageWrapper) toSave;
+        String magicNumber = "P2";
         int width = toSave.getWidth();
         int height = toSave.getHeight();
-        PGMImageWrapper toSavePGM = converter.convertTo(toSave);
+
+        toSavePGM = new PGMImageWrapper(height,width,toSave.getData(), data.getColorScale());
+
         String toWrite = magicNumber + "\n" + width + " " + height + "\n" + toSavePGM.getGrayScale()+"\n";
         writer.write(toWrite);
         return true;
@@ -29,7 +28,6 @@ public class PGMWriter extends PNMWriter {
         int height = toSave.getHeight();
         int grayScale;
 
-        PGMImageWrapper toSavePGM = converter.convertTo(toSave);
 
         grayScale = toSavePGM.getGrayScale();
         PixelWrapper[][] toWrite = toSavePGM.getData();

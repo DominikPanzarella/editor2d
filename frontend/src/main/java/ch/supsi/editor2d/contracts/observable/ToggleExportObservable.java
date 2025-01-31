@@ -17,9 +17,9 @@ public interface ToggleExportObservable {
         observers.remove(observer);
     }
 
-    default void notifyExportObservers() {
+    default void notifyExportObservers(boolean state) {
         for (ToggleExportObserver observer : observers) {
-            observer.toggleExportButton();
+            observer.toggleExportButton(state);
         }
     }
 }

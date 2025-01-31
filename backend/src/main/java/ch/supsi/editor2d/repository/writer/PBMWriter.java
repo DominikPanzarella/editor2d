@@ -1,16 +1,14 @@
 package ch.supsi.editor2d.repository.writer;
 
-import ch.supsi.editor2d.repository.converter.ImageConverter;
-import ch.supsi.editor2d.repository.converter.PBMImageConverter;
 import ch.supsi.editor2d.service.model.ImageWrapper;
 import ch.supsi.editor2d.service.model.PBMImageWrapper;
+import ch.supsi.editor2d.service.model.PPMImageWrapper;
 import ch.supsi.editor2d.service.model.PixelWrapper;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
 
 public class PBMWriter extends PNMWriter {
-    private final ImageConverter<PBMImageWrapper> converter = new PBMImageConverter<>();
 
     @Override
     protected boolean setHeader(BufferedWriter writer, ImageWrapper toSave) throws IOException {
@@ -27,9 +25,14 @@ public class PBMWriter extends PNMWriter {
         int width = toSave.getWidth();
         int height = toSave.getHeight();
 
-        PBMImageWrapper toSavePBM = converter.convertTo(toSave);
+        //Method will always receive a PPM Image type
+        PPMImageWrapper data = (PPMImageWrapper) toSave;
+
+        //Convert to supported format
+        PBMImageWrapper toSavePBM = new PBMImageWrapper(height, width, data.getData());
 
         PixelWrapper[][] toWrite = toSavePBM.getData();
+
         int y;
         for (y = 0; y < height; y++) {
             PixelWrapper[] pixelWrapperValues = toWrite[y];

@@ -9,7 +9,7 @@ package ch.supsi.editor2d.utils.exceptions;
 public class InvalidColorValueException extends RuntimeException
 {
     public InvalidColorValueException(){
-        super("Invalid color value!");
+        super("");
     }
 
     public InvalidColorValueException(final String message){

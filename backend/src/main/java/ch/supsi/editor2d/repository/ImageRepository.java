@@ -1,5 +1,6 @@
 package ch.supsi.editor2d.repository;
 
+import ch.supsi.editor2d.controller.TranslationsController;
 import ch.supsi.editor2d.repository.reader.PBMReader;
 import ch.supsi.editor2d.repository.reader.PGMReader;
 import ch.supsi.editor2d.repository.reader.PNMReader;
@@ -22,7 +23,7 @@ public class ImageRepository implements IImageRepository {
     private final PNMReader reader;
     private final PNMWriter writer;
     private static IImageRepository instance;
-
+    protected TranslationsController translationsController = TranslationsController.getInstance();
 
 
     public static IImageRepository getInstance() {
@@ -58,7 +59,7 @@ public class ImageRepository implements IImageRepository {
     public ImageWrapper handleLoadImage(final String path, final String extension) throws FileReadingException, IOException {
         // Check for extension; the reader is responsible for the reading only
         if (!SUPPORTED_EXTENSIONS.contains(extension.toUpperCase())) {
-            throw new FileReadingException("Invalid file extension");
+            throw new FileReadingException(translationsController.translate("label.cantHandle"));
         }
         return reader.read(path);
     }
@@ -67,7 +68,7 @@ public class ImageRepository implements IImageRepository {
     public boolean handleExportImage(final String path, final String extension, ImageWrapper image) throws IOException {
         // Implementa l'export dell'immagine se necessario
         if (!SUPPORTED_EXTENSIONS.contains(extension.toUpperCase())) {
-            throw new FileReadingException("Invalid file extension");
+            throw new FileReadingException(translationsController.translate("label.cantHandle"));
         }
         return writer.write(path, extension, image);
     }

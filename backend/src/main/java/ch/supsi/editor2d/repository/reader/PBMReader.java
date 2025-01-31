@@ -1,17 +1,18 @@
 package ch.supsi.editor2d.repository.reader;
 
+import ch.supsi.editor2d.controller.TranslationsController;
 import ch.supsi.editor2d.service.model.ImageWrapper;
-import ch.supsi.editor2d.service.model.PBMImageWrapper;
+import ch.supsi.editor2d.service.model.PPMImageWrapper;
 import ch.supsi.editor2d.service.model.PixelWrapper;
 import ch.supsi.editor2d.utils.exceptions.FileReadingException;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-public class PBMReader extends PNMReader
-{
-
+public class PBMReader extends PNMReader {
 
     @Override
     protected boolean canHandle(String magicNumber) {
@@ -20,7 +21,11 @@ public class PBMReader extends PNMReader
 
     @Override
     protected String[] getHeader(BufferedReader reader) throws IOException {
+        // Estrae il primo set di informazioni dall'header
         String[] headerInformation = checkLine(reader).split(" ");
+        if (headerInformation.length != 2) {
+            throw new FileReadingException(translationsController.translate("label.invalidHeader"));
+        }
         return headerInformation;
     }
 
@@ -32,30 +37,43 @@ public class PBMReader extends PNMReader
 
         PixelWrapper black = new PixelWrapper(0.0f, 0.0f, 0.0f);
         PixelWrapper white = new PixelWrapper(1.0f, 1.0f, 1.0f);
-        int y;
-        for(y=0; y<height; y++){
-            String[] pixelValues = checkLine(reader).split(" ");
 
-            if(pixelValues.length != width)
-                throw new FileReadingException("Invalid number of columns!");
+        // Accumula i pixel in una lista temporanea
+        List<Integer> pixelValues = new ArrayList<>();
+        String line;
 
-            for(int x=0; x<width; x++){
-                int pixel = Integer.parseInt(pixelValues[x]);
-                pixels[y][x] = pixel==0 ? white : black;
+        while ((line = checkLine(reader)) != null) {
+            for (String value : line.split("\\s+")) {
+                pixelValues.add(Integer.parseInt(value));
             }
         }
 
-        if(y != height)
-            throw new FileNotFoundException("Invalid number of rows!");
+
+        // Verifica il numero totale di pixel
+        if (pixelValues.size() != width * height) {
+            throw new FileReadingException(translationsController.translate("label.invalidDimensions"));
+        }
+
+        // Popola la matrice rispettando le dimensioni
+        int index = 0;
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                int pixel = pixelValues.get(index++);
+                pixels[y][x] = (pixel == 0) ? white : black;
+            }
+        }
 
         return pixels;
     }
 
     @Override
     protected ImageWrapper createImageWrapper(String[] header, PixelWrapper[][] pixels) {
-        return new PBMImageWrapper(Integer.parseInt(header[1]), Integer.parseInt(header[0]), pixels);
+        // Crea un'immagine PBM basata sui dati
+        return new PPMImageWrapper(
+                Integer.parseInt(header[1]), // Altezza
+                Integer.parseInt(header[0]), // Larghezza
+                pixels,
+                1 // Profondità colore (1 per PBM)
+        );
     }
-
-
-
 }

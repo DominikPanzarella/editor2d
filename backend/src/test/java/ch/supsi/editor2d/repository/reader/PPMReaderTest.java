@@ -98,5 +98,58 @@ public class PPMReaderTest {
         }
     }
 
+    @Test
+    public void checkNonLinearPixelDistributionTest() {
+        try {
+            String nonLinearPath = Paths.get(getClass().getClassLoader().getResource("PPM/non_linear.ppm").toURI()).toString();
+
+            try (BufferedReader nonLinearReader = new BufferedReader(new FileReader(nonLinearPath))) {
+                // Controllo magic number
+                String magicNumber = parser.getMagicNumber(nonLinearReader);
+                assertEquals("P3", magicNumber);
+
+                // Header
+                String[] header = parser.getHeader(nonLinearReader);
+                int width = Integer.parseInt(header[0]);
+                int height = Integer.parseInt(header[1]);
+                assertEquals(3, width);
+                assertEquals(2, height);
+
+                int maxColorValue = 255;
+                int[][][] pattern = {
+                        {
+                                {255, 128, 128}, {128, 255, 128}, {128, 128, 255}
+                        },
+                        {
+                                {0, 128, 255}, {128, 0, 64}, {128, 128, 128}
+                        }
+                };
+
+                PixelWrapper[][] expectedPixels = new PixelWrapper[height][width];
+                for (int y = 0; y < height; y++) {
+                    for (int x = 0; x < width; x++) {
+                        float red = pattern[y][x][0] / (float) maxColorValue;
+                        float green = pattern[y][x][1] / (float) maxColorValue;
+                        float blue = pattern[y][x][2] / (float) maxColorValue;
+                        expectedPixels[y][x] = new PixelWrapper(red, green, blue);
+                    }
+                }
+
+                PixelWrapper[][] resultGrid = parser.getPixels(nonLinearReader, header);
+
+                for (int y = 0; y < height; y++) {
+                    for (int x = 0; x < width; x++) {
+                        assertEquals(expectedPixels[y][x].getRed(), resultGrid[y][x].getRed());
+                        assertEquals(expectedPixels[y][x].getGreen(), resultGrid[y][x].getGreen());
+                        assertEquals(expectedPixels[y][x].getBlue(), resultGrid[y][x].getBlue());
+                    }
+                }
+
+            }
+        } catch (URISyntaxException | IOException | FileReadingException e) {
+            fail("An exception should not have been thrown: " + e.getMessage());
+        }
+    }
+
 
 }

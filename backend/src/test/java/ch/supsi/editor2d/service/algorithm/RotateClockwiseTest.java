@@ -183,14 +183,14 @@ public class RotateClockwiseTest
         }
 
         ImageWrapper inputImage = imageRepository.handleLoadImage(JPGMAsciiPath, "PGM");
-        PGMImageWrapper outputImage = (PGMImageWrapper) rotateClockwise.apply(inputImage);
+        PPMImageWrapper outputImage = (PPMImageWrapper) rotateClockwise.apply(inputImage);
 
         // Matrice attesa dopo la rotazione oraria
         PixelWrapper[][] expectedOutputMatrix = outputImage.getData();
 
         assertEquals(outputImage.getHeight(), expectedHeight); // L'altezza dopo la rotazione diventa la larghezza
         assertEquals(outputImage.getWidth(), expectedWidth); // La larghezza dopo la rotazione diventa l'altezza
-        assertEquals(outputImage.getGrayScale(), maxGrayValue);
+        assertEquals(outputImage.getColorScale(), maxGrayValue);
 
         // Confrontiamo i singoli elementi delle matrici
         for (int y = 0; y < expectedHeight; y++) {

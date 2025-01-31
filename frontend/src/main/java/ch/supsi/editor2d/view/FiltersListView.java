@@ -63,10 +63,11 @@ public class FiltersListView implements ControlledView, FiltersLoadedObserver, T
         // Creiamo un VBox per visualizzare i bottoni uno sotto l'altro
         VBox vbox = new VBox();
         vbox.setSpacing(10);  // Imposta uno spazio verticale tra i bottoni
+        TranslationsController translationsController = TranslationsController.getInstance();
 
         // Iteriamo attraverso la lista dei filtri e creiamo un bottone per ciascuno
         for (Filter filter : filters) {
-            Button filterButton = new Button(filter.getName()); // Creiamo un bottone con il nome del filtro
+            Button filterButton = new Button(translationsController.translate("label."+filter.getName())); // Creiamo un bottone con il nome del filtro
             filterButton.setPrefWidth(filtersContainerAnchorPane.getPrefWidth()); // Imposta la larghezza del bottone
             filterButton.setPrefHeight(50); // Imposta un'altezza fissa per i bottoni
 
@@ -94,11 +95,11 @@ public class FiltersListView implements ControlledView, FiltersLoadedObserver, T
     }
 
     @Override
-    public void toggleFiltersButtons() {
+    public void toggleFiltersButtons(boolean state) {
         if (!filtersContainerAnchorPane.getChildren().isEmpty() && filtersContainerAnchorPane.getChildren().get(0) instanceof VBox vbox) {
             for (var node : vbox.getChildren()) {
                 if (node instanceof Button button) {
-                    button.setDisable(!button.isDisable());
+                    button.setDisable(state);
                 }
             }
         }

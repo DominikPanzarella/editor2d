@@ -2,6 +2,7 @@ package ch.supsi.editor2d.view;
 
 import ch.supsi.editor2d.command.CancelCommand;
 import ch.supsi.editor2d.command.OkCommand;
+import ch.supsi.editor2d.contracts.displayable.ExitDisplayable;
 import ch.supsi.editor2d.contracts.observer.ControlledView;
 import ch.supsi.editor2d.contracts.observer.ExitObserver;
 import ch.supsi.editor2d.controller.TranslationsController;
@@ -20,7 +21,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class ExitView implements ControlledView, ExitObserver
+public class ExitView implements ControlledView, ExitDisplayable, ExitObserver
 {
     @FXML
     Button cancelButton;
@@ -55,10 +56,12 @@ public class ExitView implements ControlledView, ExitObserver
         return myself;
     }
 
+    @Override
     public <T extends OkCommand<? extends OkReceiver<OKHandler>>> void createOKBehaviour(T command){
         okButton.setOnAction(action->command.execute());
     }
 
+    @Override
     public <T extends CancelCommand<? extends CancelReceiver<CancelHandler>>> void createCancelBehaviour(T command){
         cancelButton.setOnAction(action->command.execute());
     }

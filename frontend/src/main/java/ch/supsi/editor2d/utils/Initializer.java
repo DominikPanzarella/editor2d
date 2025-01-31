@@ -92,47 +92,26 @@ public class Initializer
 
         // menuBar.fxml inside mainView.fxml
         AnchorPane menuBarPane = mainViewView.getMenuBarPane();
-        menuBarPane.getChildren().add(menuBar);
-        AnchorPane.setBottomAnchor(menuBar, 0.0);
-        AnchorPane.setTopAnchor(menuBar, 0.0);
-        AnchorPane.setLeftAnchor(menuBar, 0.0);
-        AnchorPane.setRightAnchor(menuBar, 0.0);
+        safelyAttachNode(mainViewView.getMenuBarPane(), menuBar);
 
         // infoBarView.fxml inside mainView.fxml
         AnchorPane infoBarPane = mainViewView.getInfoBarPane();
-        infoBarPane.getChildren().add(infoBarView);
-        AnchorPane.setBottomAnchor(infoBarView, 0.0);
-        AnchorPane.setTopAnchor(infoBarView, 0.0);
-        AnchorPane.setLeftAnchor(infoBarView, 0.0);
-        AnchorPane.setRightAnchor(infoBarView, 0.0);
+        safelyAttachNode(mainViewView.getInfoBarPane(), infoBarView);
 
 
         // imageView.fxml inside mainView.fxml
         AnchorPane imagePane = mainViewView.getImagePane();
-        imagePane.getChildren().add(imageView);
-        AnchorPane.setBottomAnchor(imageView, 0.0);
-        AnchorPane.setTopAnchor(imageView, 0.0);
-        AnchorPane.setLeftAnchor(imageView, 0.0);
-        AnchorPane.setRightAnchor(imageView, 0.0);
+        safelyAttachNode(mainViewView.getImagePane(), imageView);
 
         // FilterSelectionView inside mainView
         AnchorPane filtersSelectionPane = mainViewView.getFiltersListPane();
-        filtersSelectionPane.getChildren().setAll(filterSelectionView);
-        AnchorPane.setBottomAnchor(filterSelectionView, 0.0);
-        AnchorPane.setTopAnchor(filterSelectionView, 0.0);
-        AnchorPane.setLeftAnchor(filterSelectionView, 0.0);
-        AnchorPane.setRightAnchor(filterSelectionView, 0.0);
+        safelyAttachNode(mainViewView.getFiltersListPane(), filterSelectionView);
+
 
 
         // PipelineView inside mainView
         AnchorPane pipelinePane = mainViewView.getPipelinePane();
-        pipelinePane.getChildren().setAll(pipelineViewParent);
-        AnchorPane.setBottomAnchor(pipelineViewParent, 0.0);
-        AnchorPane.setTopAnchor(pipelineViewParent, 0.0);
-        AnchorPane.setLeftAnchor(pipelineViewParent, 0.0);
-        AnchorPane.setRightAnchor(pipelineViewParent, 0.0);
-        pipelinePane.getChildren().setAll(pipelineViewParent);
-
+        safelyAttachNode(mainViewView.getPipelinePane(), pipelineViewParent);
         /*
            ###################################
                    Setup Controller
@@ -207,6 +186,8 @@ public class Initializer
         exitView.createOKBehaviour(okCommand);
         pipelineView.createUndoBehaviour(undoCommand);
         pipelineView.createRedoBehaviour(redoCommand);
+        menuBarView.createUndoBehaviour(undoCommand);
+        menuBarView.createRedoBehaviour(redoCommand);
 
 
         /*
@@ -233,6 +214,8 @@ public class Initializer
         filtersModel.addeRunButtonsObserver(menuBarView);
         model.addUndoButtonObserver(pipelineView);
         model.addORedoButtonObserver(pipelineView);
+        model.addORedoButtonObserver(menuBarView);
+        model.addUndoButtonObserver(menuBarView);
         model.addUndoObserver(imgView);
         model.addRedoObserver(imgView);
         moreInfoModel.addMoreInfoObserver(moreInfoView);
@@ -264,7 +247,7 @@ public class Initializer
 
         stage.setTitle("Editor2D");
         stage.setScene(new Scene(mainView));
-        stage.getIcons().add(new Image(Objects.requireNonNull(Initializer.class.getResourceAsStream("/logo/2DEditorLogo.png"))));
+        stage.getIcons().add(new Image(Objects.requireNonNull(Initializer.class.getResourceAsStream("/logo/Editor.png"))));
 
          /*
           ###################################
@@ -272,9 +255,9 @@ public class Initializer
            ###################################
          */
 
-        KeyCombination zoomInKeyCombination = new KeyCodeCombination(KeyCode.I, KeyCombination.CONTROL_DOWN);
-        KeyCombination zoomOutKeyCombination = new KeyCodeCombination(KeyCode.O,  KeyCombination.CONTROL_DOWN);
-        KeyCombination openFileKeyCombination = new KeyCodeCombination(KeyCode.E, KeyCombination.CONTROL_DOWN);
+        KeyCombination zoomInKeyCombination = new KeyCodeCombination(KeyCode.UP, KeyCombination.CONTROL_DOWN);
+        KeyCombination zoomOutKeyCombination = new KeyCodeCombination(KeyCode.DOWN,  KeyCombination.CONTROL_DOWN);
+        KeyCombination openFileKeyCombination = new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN);
         KeyCombination runPipelineKeyCombination = new KeyCodeCombination(KeyCode.R, KeyCombination.CONTROL_DOWN);
         KeyCombination clearPipelineKeyCombination = new KeyCodeCombination(KeyCode.D, KeyCombination.CONTROL_DOWN);
         KeyCombination undoPipelineKeyCombination = new KeyCodeCombination(KeyCode.P, KeyCombination.CONTROL_DOWN);
@@ -307,6 +290,15 @@ public class Initializer
 
          */
         stage.show();
+    }
+
+    private static void safelyAttachNode(AnchorPane container, Parent node) {
+        container.getChildren().remove(node); // Remove the node if it already exists
+        container.getChildren().add(node); // Add the node
+        AnchorPane.setTopAnchor(node, 0.0);
+        AnchorPane.setBottomAnchor(node, 0.0);
+        AnchorPane.setLeftAnchor(node, 0.0);
+        AnchorPane.setRightAnchor(node, 0.0);
     }
 
 }

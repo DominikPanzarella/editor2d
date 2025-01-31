@@ -3,7 +3,7 @@ package ch.supsi.editor2d.utils.exceptions;
 public class FileReadingException extends RuntimeException
 {
     public FileReadingException(){
-        super("Invalid file extension!");
+        super("");
     }
 
     public FileReadingException(final String message){

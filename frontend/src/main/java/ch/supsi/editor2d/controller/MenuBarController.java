@@ -4,6 +4,7 @@ package ch.supsi.editor2d.controller;
 import ch.supsi.editor2d.contracts.handler.*;
 import ch.supsi.editor2d.contracts.receiver.*;
 import ch.supsi.editor2d.model.DataModel;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 public class MenuBarController implements
@@ -84,8 +85,8 @@ public class MenuBarController implements
     }
 
     @Override
-    public void exportFile() {
-        exportModel.exportFile();
+    public void exportFile(FileChooser fileChooser) {
+        exportModel.exportFile(fileChooser);
     }
 
 }

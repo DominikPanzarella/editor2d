@@ -1,5 +1,6 @@
 package ch.supsi.editor2d.repository.reader;
 
+import ch.supsi.editor2d.utils.exceptions.FileReadingException;
 import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;
@@ -9,19 +10,18 @@ import java.io.StringReader;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class PNMReaderTest {
 
     @Test
     public void checkAndGetLineRemoveContent(){
         String expected = "1234";
-        Reader reader = new StringReader("1234 # Comment");
+        java.io.Reader reader = new StringReader("1234 # Comment");
         BufferedReader bufferedReader = new BufferedReader(reader);
 
         try {
-            String result = PNMReader.checkLine(bufferedReader);
+            String result = new PPMReader().checkLine(bufferedReader);
             assertEquals(expected, result);
         } catch (IOException e) {
             fail();
@@ -30,13 +30,12 @@ public class PNMReaderTest {
 
     @Test
     void checkAndGetLineEmptyLine() {
-        Reader reader = new StringReader("");
+        java.io.Reader reader = new StringReader("");
         BufferedReader bufferedReader = new BufferedReader(reader);
 
         try {
-            PNMReader.checkLine(bufferedReader);
-            fail();
-        } catch (IOException ignored) {
+            assertNull(new PPMReader().checkLine(bufferedReader));
+        } catch (FileReadingException | IOException ignored) {
         }
     }
 
@@ -44,12 +43,12 @@ public class PNMReaderTest {
     void checkAndGetLineMultiLine() {
         List<String> expected = Arrays.asList("Line1", "Line3");
 
-        Reader reader = new StringReader("Line1\n#Cancel\nLine3");
+        java.io.Reader reader = new StringReader("Line1\n#Cancel\nLine3");
         BufferedReader bufferedReader = new BufferedReader(reader);
 
         try {
-            String result1 = PNMReader.checkLine(bufferedReader);
-            String result2 = PNMReader.checkLine(bufferedReader);
+            String result1 = new PPMReader().checkLine(bufferedReader);
+            String result2 = new PPMReader().checkLine(bufferedReader);
             assertEquals(expected.get(0), result1);
             assertEquals(expected.get(1), result2);
         } catch (IOException e) {
@@ -63,8 +62,8 @@ public class PNMReaderTest {
         Reader reader = new StringReader("               Line1\n      #Cancel\n         Line3");
         BufferedReader bufferedReader = new BufferedReader(reader);
         try{
-            String result = PNMReader.checkLine(bufferedReader);
-            String result2 = PNMReader.checkLine(bufferedReader);
+            String result = new PPMReader().checkLine(bufferedReader);
+            String result2 = new PPMReader().checkLine(bufferedReader);
             assertEquals(expected.get(0),result);
             assertEquals(expected.get(1), result2);
         } catch (IOException e) {

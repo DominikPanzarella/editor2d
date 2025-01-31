@@ -16,9 +16,9 @@ public interface ToggleEmptyPipelineObservable {
         observers.remove(observer);
     }
 
-    default void notifyEmptyPipelineObservers() {
+    default void notifyEmptyPipelineObservers(boolean state) {
         for (ToggleEmptyPipelineObserver observer : observers) {
-            observer.toggleEmptyPipelineButton();
+            observer.toggleEmptyPipelineButton(state);
         }
     }
 }

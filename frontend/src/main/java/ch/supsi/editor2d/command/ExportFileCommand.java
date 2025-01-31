@@ -2,6 +2,7 @@ package ch.supsi.editor2d.command;
 
 import ch.supsi.editor2d.contracts.handler.ExportFileHandler;
 import ch.supsi.editor2d.contracts.receiver.ExportFileReceiver;
+import javafx.stage.FileChooser;
 
 public class ExportFileCommand<T extends ExportFileReceiver<ExportFileHandler>> extends AbstractCommand<T>
 {
@@ -17,6 +18,6 @@ public class ExportFileCommand<T extends ExportFileReceiver<ExportFileHandler>> 
 
     @Override
     public void execute() {
-        receiver.exportFile();
+        receiver.exportFile(new FileChooser());
     }
 }

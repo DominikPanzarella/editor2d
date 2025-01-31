@@ -1,5 +1,6 @@
 package ch.supsi.editor2d.service.pipeline;
 
+import ch.supsi.editor2d.controller.TranslationsController;
 import ch.supsi.editor2d.service.algorithm.Applicable;
 import ch.supsi.editor2d.service.algorithm.Filter;
 import ch.supsi.editor2d.service.model.ImageWrapper;
@@ -11,7 +12,7 @@ import java.util.List;
 
 public class PipelineExecutor implements Executor<ImageWrapper, Applicable> {
     private final List<Applicable> filtersList;
-
+    private TranslationsController translationsController = TranslationsController.getInstance();
 
     public PipelineExecutor(){
         filtersList = new LinkedList<>();
@@ -23,7 +24,7 @@ public class PipelineExecutor implements Executor<ImageWrapper, Applicable> {
         if(filtersList.isEmpty())
             throw new EmptyPipeline();
         if(input == null)
-            throw new ImageProcessingException("Input image cannot be null!");
+            throw new ImageProcessingException(translationsController.translate("label.imageProcessingException"));
         ImageWrapper output = input.clone();
         for(Applicable toApply : filtersList){
             output = toApply.apply(output);

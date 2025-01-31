@@ -1,11 +1,13 @@
 package ch.supsi.editor2d.repository.writer;
 
+import ch.supsi.editor2d.controller.TranslationsController;
 import ch.supsi.editor2d.service.model.ImageWrapper;
 
 import java.io.*;
 
 public abstract class PNMWriter implements Writer {
     protected PNMWriter successor;
+    protected static TranslationsController translationsController = TranslationsController.getInstance();
 
     public void setSuccessor(PNMWriter successor){
         this.successor = successor;
@@ -19,7 +21,7 @@ public abstract class PNMWriter implements Writer {
             } else if (successor != null) {
                 return successor.write(path, extension, toSave);
             } else {
-                throw new IOException("Can't handle this file!");
+                throw new IOException("File type is not supported");
             }
         }
     }

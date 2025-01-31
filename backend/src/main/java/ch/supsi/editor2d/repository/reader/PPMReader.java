@@ -7,14 +7,11 @@ import ch.supsi.editor2d.utils.exceptions.FileReadingException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PPMReader extends PNMReader {
     private int maxColorValue;
-
-
 
     @Override
     protected String[] getHeader(BufferedReader reader) throws IOException {
@@ -23,25 +20,44 @@ public class PPMReader extends PNMReader {
     }
 
     @Override
-    protected PixelWrapper[][] getPixels(BufferedReader reader,String[] header) throws IOException {
+    protected PixelWrapper[][] getPixels(BufferedReader reader, String[] header) throws IOException, FileReadingException {
         final int width = Integer.parseInt(header[0]);
         final int height = Integer.parseInt(header[1]);
         maxColorValue = Integer.parseInt(checkLine(reader));
 
         PixelWrapper[][] pixels = new PixelWrapper[height][width];
 
-        int y;
-        for (y = 0; y < height; y++) {
-            String[] pixelValues = checkLine(reader).split(" ");
+        // Lista per accumulare tutti i valori dei pixel
+        List<Integer> pixelValues = new ArrayList<>();
 
-            if (pixelValues.length != width * 3) {
-                throw new FileReadingException("Invalid number of pixel values!");
+        // Leggi le righe finché non abbiamo tutti i pixel
+        String line;
+        while ((line = checkLine(reader)) != null) {
+            String[] values = line.split("\\s+");
+            for (String val : values) {
+                if (!val.trim().isEmpty()) {
+                    pixelValues.add(Integer.parseInt(val));
+                }
             }
 
+            // Se abbiamo raggiunto o superato il numero totale di pixel richiesto, interrompi la lettura
+            if (pixelValues.size() >= width * height * 3) {
+                break;
+            }
+        }
+
+        // Verifica se il numero di pixel è corretto
+        if (pixelValues.size() != width * height * 3) {
+            throw new FileReadingException(translationsController.translate("label.invalidNumberPixels"));
+        }
+
+        // Popola la matrice di pixel
+        int index = 0;
+        for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                int red = Integer.parseInt(pixelValues[x * 3]);
-                int green = Integer.parseInt(pixelValues[x * 3 + 1]);
-                int blue = Integer.parseInt(pixelValues[x * 3 + 2]);
+                int red = pixelValues.get(index++);
+                int green = pixelValues.get(index++);
+                int blue = pixelValues.get(index++);
 
                 float normalizedRed = (((float) 255 / maxColorValue) / 255.0f) * red;
                 float normalizedGreen = (((float) 255 / maxColorValue) / 255.0f) * green;
@@ -51,14 +67,8 @@ public class PPMReader extends PNMReader {
             }
         }
 
-        if (y != height) {
-            throw new IOException("Invalid number of rows!");
-        }
-
         return pixels;
     }
-
-
 
     @Override
     protected ImageWrapper createImageWrapper(String[] header, PixelWrapper[][] pixels) {

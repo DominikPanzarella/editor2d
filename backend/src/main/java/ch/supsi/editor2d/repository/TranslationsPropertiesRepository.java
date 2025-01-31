@@ -65,7 +65,6 @@ public class TranslationsPropertiesRepository implements TranslationsRepositoryI
         for (String key : bundle.keySet()) {
             translations.put(key, bundle.getString(key));
         }
-
         return translations;
     }
 

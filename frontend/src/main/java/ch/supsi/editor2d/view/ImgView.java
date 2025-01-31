@@ -1,5 +1,6 @@
 package ch.supsi.editor2d.view;
 
+import ch.supsi.editor2d.contracts.displayable.ImageDisplayable;
 import ch.supsi.editor2d.contracts.observer.*;
 import ch.supsi.editor2d.controller.TranslationsController;
 import ch.supsi.editor2d.service.model.ImageWrapper;
@@ -16,7 +17,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class ImgView implements ControlledView, ImageLoadedObserver, ZoomInObserver, ZoomOutObserver, UndoObserver,RedoObserver
+public class ImgView implements ControlledView, ImageDisplayable,ImageLoadedObserver, ZoomInObserver, ZoomOutObserver, UndoObserver,RedoObserver
 {
 
     @FXML
@@ -48,6 +49,7 @@ public class ImgView implements ControlledView, ImageLoadedObserver, ZoomInObser
         return myself;
     }
 
+    @Override
     public void draw(ImageWrapper toDraw){
         // Create a new WritableImage
 

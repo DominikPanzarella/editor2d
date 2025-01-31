@@ -17,9 +17,9 @@ public interface ToggleFiltersObservable {
         observers.remove(observer);
     }
 
-    default void notifyFiltersObservers() {
+    default void notifyFiltersObservers(boolean state) {
         for (ToggleFiltersObserver observer : observers) {
-            observer.toggleFiltersButtons();
+            observer.toggleFiltersButtons(state);
         }
     }
 }

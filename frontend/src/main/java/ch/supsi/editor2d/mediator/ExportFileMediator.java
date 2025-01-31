@@ -5,6 +5,7 @@ import ch.supsi.editor2d.contracts.receiver.ExportFileReceiver;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 public class ExportFileMediator<T extends ExportFileReceiver<ExportFileHandler>> implements ShortcutMediator
@@ -22,7 +23,7 @@ public class ExportFileMediator<T extends ExportFileReceiver<ExportFileHandler>>
         scene.addEventFilter(KeyEvent.KEY_PRESSED, keyEvent -> {
 
             if(exportFileKeyCombination.match(keyEvent))
-                receiver.exportFile();
+                receiver.exportFile(new FileChooser());
         });
     }
 

@@ -13,17 +13,19 @@ import ch.supsi.editor2d.service.model.ImageWrapper;
 import ch.supsi.editor2d.utils.exceptions.EmptyPipeline;
 import ch.supsi.editor2d.utils.exceptions.FileReadingException;
 import ch.supsi.editor2d.utils.exceptions.ImageProcessingException;
+import javafx.application.Platform;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+
 import java.io.File;
 import java.io.IOException;
-import java.util.Map;
+import java.util.Objects;
 
-/*
-* Data model that contains the application data through the usage
-* */
-public class DataModel implements Observable, RedoHandler, UndoHandler, OpenFileHandler, ZoomInHandler, ZoomOutHandler, ExportFileHandler, ExitHandler, ImageLoadedObservable, RunPipelineHandler, ClearPipelineHandler, OKHandler, CancelHandler, ClearPipelineObservable , FeedbackObservable, ZoomOutObservable, ZoomInObservable, ExitObservable, ToggleExportObservable, ToggleFiltersObservable, ToggleZoomButtonsObservable, ToggleUndoButtonObservable, ToggleRedoButtonObservable, UndoObservable, RedoObservable
-{
+/**
+ * Data model that contains the application data through the usage.
+ */
+public class DataModel implements Observable, RedoHandler, UndoHandler, OpenFileHandler, ZoomInHandler, ZoomOutHandler, ExportFileHandler, ExitHandler, ImageLoadedObservable, RunPipelineHandler, ClearPipelineHandler, OKHandler, CancelHandler, ClearPipelineObservable, FeedbackObservable, ZoomOutObservable, ZoomInObservable, ExitObservable, ToggleExportObservable, ToggleFiltersObservable, ToggleZoomButtonsObservable, ToggleUndoButtonObservable, ToggleRedoButtonObservable, UndoObservable, RedoObservable {
+
     private ImageWrapper initialImage;
     private ImageWrapper currentImage;
     private static DataModel mySelf;
@@ -32,6 +34,7 @@ public class DataModel implements Observable, RedoHandler, UndoHandler, OpenFile
     private TranslationsController translationsController;
     private PreferencesController preferencesController;
     private MementoCaretaker<ImageWrapper> imageWrapperMementoCaretaker;
+    private FileChooser fileChooser; // Injected for testability
 
     private boolean isChanged;
 
@@ -42,6 +45,7 @@ public class DataModel implements Observable, RedoHandler, UndoHandler, OpenFile
         this.translationsController = TranslationsController.getInstance();
         this.preferencesController = PreferencesController.getInstance();
         this.imageWrapperMementoCaretaker = new MementoCaretaker<>();
+        this.fileChooser = null; // Default FileChooser
         this.isChanged = false;
     }
 
@@ -52,20 +56,29 @@ public class DataModel implements Observable, RedoHandler, UndoHandler, OpenFile
         return mySelf;
     }
 
-    public ImageWrapper getCurrentImage(){
+
+    public void setFileChooser(FileChooser fileChooser) {
+        this.fileChooser = fileChooser;
+    }
+
+    public ImageWrapper getCurrentImage() {
         return currentImage;
     }
 
-    public void openFile(){
-        final FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle(translationsController.translate("label.openTitle"));
-        fileChooser.setInitialDirectory(preferencesController.getUserPreferencesDirectoryPath().toFile());
+    public void openFile() {
+        Platform.runLater(() -> {
+            final FileChooser fileChooser;
+            fileChooser = Objects.requireNonNullElseGet(this.fileChooser, FileChooser::new);
+            fileChooser.setTitle(translationsController.translate("label.openTitle"));
+            fileChooser.setInitialDirectory(preferencesController.getUserPreferencesDirectoryPath().toFile());
 
-        File file = fileChooser.showOpenDialog(null);
-        if(file != null){
-            loadImage(file.getPath());
-            notifyFeedbackObservers(translationsController.translate("label.imageOpened"));
-        }
+            File file = fileChooser.showOpenDialog(null);
+            if (file != null) {
+                loadImage(file.getPath());
+                notifyFeedbackObservers(translationsController.translate("label.imageOpened"));
+
+            }
+        });
     }
 
     private void loadImage(String path){
@@ -74,11 +87,16 @@ public class DataModel implements Observable, RedoHandler, UndoHandler, OpenFile
             this.initialImage = loadedImage;
             this.currentImage = this.initialImage;
             // Add the state after successfully loading an image
+
+            this.imageWrapperMementoCaretaker = new MementoCaretaker<>();
             this.imageWrapperMementoCaretaker.addState(new Memento<>(currentImage.clone()));
+            this.isChanged = false;
             notifyObservers(currentImage);
-            notifyExportObservers();
-            notifyFiltersObservers();
-            notifyZoomObservers();
+            notifyExportObservers(false);
+            notifyFiltersObservers(false);
+            notifyZoomObservers(false);
+            notifyRedoButtonObservers(true);
+            notifyUndoButtonObservers(true);
         } catch (FileReadingException | IOException e) {
             new ErrorPopup().show(e.getMessage());
         }
@@ -87,6 +105,12 @@ public class DataModel implements Observable, RedoHandler, UndoHandler, OpenFile
     @Override
     public void runPipeline() {
         // Controlla se l'immagine attuale è cambiata prima di eseguire la pipeline
+
+        if(currentImage==null){
+            notifyFeedbackObservers(translationsController.translate("label.emptyImage"));
+            return;
+        }
+
         ImageWrapper previousImage = currentImage.clone();
 
         // Salva l'immagine attuale per l'elaborazione
@@ -95,7 +119,7 @@ public class DataModel implements Observable, RedoHandler, UndoHandler, OpenFile
         try {
             // Esegui la pipeline
             currentImage = pipelineController.runPipeline(initialImage);
-
+            isChanged = true;
             // Aggiungi lo stato solo se c'è stata una modifica
             if (!previousImage.equals(currentImage)) {
                 this.imageWrapperMementoCaretaker.addState(new Memento<>(currentImage.clone()));
@@ -113,24 +137,40 @@ public class DataModel implements Observable, RedoHandler, UndoHandler, OpenFile
             notifyFeedbackObservers(translationsController.translate("label.emptyPipelineException"));
         }
 
-        imageWrapperMementoCaretaker.printCurrentMemento();
+        //imageWrapperMementoCaretaker.printCurrentMemento();
     }
 
     @Override
     public void clearPipeline() {
-        pipelineController.clearAllPipeline();
-        notifyClearPipelineObservers();
-        notifyFeedbackObservers(translationsController.translate("label.pipelineCleared"));
+        if(currentImage==null)
+            notifyFeedbackObservers(translationsController.translate("label.emptyImage"));
+        else{
+            pipelineController.clearAllPipeline();
+            notifyClearPipelineObservers();
+            notifyFeedbackObservers(translationsController.translate("label.pipelineCleared"));
+        }
+
     }
 
     @Override
     public void zoomIn() {
-        notifyZoomInObservers();
+        if(currentImage==null)
+            notifyFeedbackObservers(translationsController.translate("label.emptyImage"));
+        else{
+            notifyZoomInObservers();
+            notifyFeedbackObservers(translationsController.translate("label.ZoomIn"));
+        }
+
     }
 
     @Override
     public void zoomOut() {
-        notifyZoomOutObservers();
+        if(currentImage==null)
+            notifyFeedbackObservers(translationsController.translate("label.emptyImage"));
+        else{
+            notifyZoomOutObservers();
+            notifyFeedbackObservers(translationsController.translate("label.ZoomOut"));
+        }
     }
 
     @Override
@@ -154,14 +194,13 @@ public class DataModel implements Observable, RedoHandler, UndoHandler, OpenFile
     }
 
     @Override
-    public void exportFile() {
+    public void exportFile(FileChooser fileChooser) {
         if(currentImage == null){
             new ErrorPopup().show(translationsController.translate("label.emptyImage"));
             notifyFeedbackObservers(translationsController.translate("label.emptyImage"));
             return;
         }
 
-        final FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PGM Files", "*.pgm"));
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PBM Files", "*.pbm"));
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PPM Files", "*.ppm"));
@@ -169,13 +208,15 @@ public class DataModel implements Observable, RedoHandler, UndoHandler, OpenFile
         fileChooser.setInitialDirectory(preferencesController.getUserPreferencesDirectoryPath().toFile());
 
         File file = fileChooser.showSaveDialog(null);
-        String[] fileName = file.toURI().getPath().split(File.separator);
-        String[] fileNameAndExtension = fileName[fileName.length - 1].split("\\.");
-        try {
-            imageController.exportImage(file.toURI().getPath(), fileNameAndExtension[1], currentImage);
-            notifyFeedbackObservers(translationsController.translate("label.imageExported"));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if (file != null) {
+            String[] fileName = file.toURI().getPath().split(File.separator);
+            String[] fileNameAndExtension = fileName[fileName.length - 1].split("\\.");
+            try {
+                imageController.exportImage(file.toURI().getPath(), fileNameAndExtension[1], currentImage);
+                notifyFeedbackObservers(translationsController.translate("label.imageExported"));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
@@ -189,8 +230,10 @@ public class DataModel implements Observable, RedoHandler, UndoHandler, OpenFile
             if(!imageWrapperMementoCaretaker.canUndo()){
                 notifyUndoButtonObservers(true);
             }
+            notifyFeedbackObservers(translationsController.translate("label.undo"));
         } else {
             notifyUndoButtonObservers(true);
+            notifyFeedbackObservers(translationsController.translate("label.emptyImage"));
         }
     }
 
@@ -204,8 +247,10 @@ public class DataModel implements Observable, RedoHandler, UndoHandler, OpenFile
             if(!imageWrapperMementoCaretaker.canRedo()){
                 notifyRedoButtonObservers(true);
             }
+            notifyFeedbackObservers(translationsController.translate("label.redo"));
         } else {
             notifyRedoButtonObservers(true);
+            notifyFeedbackObservers(translationsController.translate("label.emptyImage"));
         }
     }
 

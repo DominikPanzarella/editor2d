@@ -125,7 +125,7 @@ public class NegativeTest {
         }
 
         ImageWrapper inputImage = imageRepository.handleLoadImage(PGMAsciiPath, "PGM");
-        PGMImageWrapper outputImage = (PGMImageWrapper) negativeFilter.apply(inputImage);
+        PPMImageWrapper outputImage = (PPMImageWrapper) negativeFilter.apply(inputImage);
 
         PixelWrapper[][] expectedOutputMatrix = outputImage.getData();
 

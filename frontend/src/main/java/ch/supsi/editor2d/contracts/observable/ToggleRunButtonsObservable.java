@@ -17,8 +17,8 @@ public interface ToggleRunButtonsObservable {
         observers.remove(observer);
     }
 
-    default void notifyeRunButtonsObservers() {
+    default void notifyeRunButtonsObservers(boolean state) {
         for (ToggleRunButtonsObserver observer : observers) {
-            observer.toggleRunButtons();
+            observer.toggleRunButtons(state);
         }
     }}

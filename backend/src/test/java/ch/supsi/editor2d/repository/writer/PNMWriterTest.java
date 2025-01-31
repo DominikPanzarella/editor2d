@@ -13,5 +13,5 @@ import java.nio.file.Files;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PNMWriterTest {
-
+    //TODO: test the chain
 }

@@ -1,5 +1,6 @@
 package ch.supsi.editor2d.view;
 
+import ch.supsi.editor2d.contracts.displayable.InfoDisplayable;
 import ch.supsi.editor2d.contracts.observer.ControlledView;
 import ch.supsi.editor2d.contracts.observer.FeedbackObserver;
 import ch.supsi.editor2d.controller.TranslationsController;
@@ -15,7 +16,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
-public class InfoBarView implements FeedbackObserver, ControlledView {
+public class InfoBarView implements FeedbackObserver, ControlledView, InfoDisplayable {
     @FXML
     private Text infobarText;
     @FXML
@@ -52,7 +53,7 @@ public class InfoBarView implements FeedbackObserver, ControlledView {
         return myself;
     }
 
-
+    @Override
     public void addToDisplay(String feedback) {
         // Ottieni l'ora corrente e formattala
         String currentTime = LocalTime.now().format(TIME_FORMATTER);

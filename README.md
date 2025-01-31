@@ -42,46 +42,8 @@ Editor2D is a simple 2D image editor designed to work with PNM format images, su
 7. **Use Undo and Redo**: Use the options in the "Edit" menu to undo or redo changes or click on the relative arrow icons.
 8. **Zoom**: Use the zoom controls under "Edit" to enlarge or reduce the image view.
 
-## Clone
-
-```sh
-git clone https://github.com/DominikPanzarella/editor2d.git
-```
-
-## Install
-
-Install the backend library
-
-```sh
-cd backed && mvn clean install
-```
-
-Create the jar file
-
-```sh
-cd frontend && mvn clean install
-```
-
-## Usage
-
-```sh
-cd frontend && java -jar target/2dEditor-jar-with-dependencies.jar
-```
-
-## Contribute
-
-For contributions, bug reports, or suggestions, feel free to open an issue on GitHub.
-
-## Authors
-
-👤 **Dominik Panzarella**
-[![Instagram](https://img.shields.io/badge/Instagram-%23E4405F.svg?logo=Instagram&logoColor=white)](https://www.instagram.com/__dom_/) [![LinkedIn](https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/dominik-panzarella-a8412817a) [![Stack Overflow](https://img.shields.io/badge/-Stackoverflow-FE7A16?logo=stack-overflow&logoColor=white)](https://stackoverflow.com/users/21978407/dominik-panzarella) [![YouTube](https://img.shields.io/badge/YouTube-%23FF0000.svg?logo=YouTube&logoColor=white)](https://www.youtube.com/channel/UC128UoG-qfNOf6TCjarx5Mw) 
-
-## Contact
-
-For more information, you can contact the developers via email.
-
----
-
 ## License
 This project is part of a school assignment for the SUPSI (Scuola Universitaria Professionale della Svizzera italiana). It is not intended for commercial use.
+
+## Contact
+For more information, you can contact the developers via email.

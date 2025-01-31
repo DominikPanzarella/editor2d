@@ -18,9 +18,9 @@ public interface ToggleZoomButtonsObservable {
         observers.remove(observer);
     }
 
-    default void notifyZoomObservers() {
+    default void notifyZoomObservers(boolean state) {
         for (ToggleZoomButtonsObserver observer : observers) {
-            observer.toggleZoomButtons();
+            observer.toggleZoomButtons(state);
         }
     }
 }

@@ -38,7 +38,7 @@ public class MoreInfoModel implements Observable, MoreInfoObservable, MoreInfoHa
 
             final String shortcutName = entry.getKey();
             final String shortcutCommand = entry.getValue();
-            final String description = translationsController.translate(shortcutName);
+            final String description = translationsController.translate("label."+shortcutName);
             List<String> details = new LinkedList<>();
             details.add(shortcutCommand);
             details.add(description);

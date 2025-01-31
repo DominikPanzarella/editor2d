@@ -45,19 +45,19 @@ public class FiltersModel implements Observable, FiltersLoadedObservable, Filter
     public void addFilter(Filter filter) {
         pipelineController.addFilter(filter);
         notifyObservers(filter.getName());
-        notifyFeedbackObservers(filter.getName()+" "+translationsController.translate("label.filterAdded"));
+        notifyFeedbackObservers(translationsController.translate("label."+filter.getName())+" "+translationsController.translate("label.filterAdded"));
         if(isEmpty){
             isEmpty = false;
-            notifyeRunButtonsObservers();
-            notifyEmptyPipelineObservers();
+            notifyeRunButtonsObservers(false);
+            notifyEmptyPipelineObservers(false);
         }
     }
 
     @Override
     public void clearPipeline() {
         isEmpty = true;
-        notifyeRunButtonsObservers();
-        notifyEmptyPipelineObservers();
+        notifyeRunButtonsObservers(true);
+        notifyEmptyPipelineObservers(true);
     }
 
 }

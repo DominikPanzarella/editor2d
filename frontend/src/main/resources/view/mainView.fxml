@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<BorderPane prefHeight="550.0" prefWidth="1250.0" style="-fx-border-color: c5c6c7; -fx-border-width: 0;" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21">
+<BorderPane prefHeight="550.0" prefWidth="1250.0" style="-fx-border-color: c5c6c7; -fx-border-width: 0;" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17">
    <center>
       <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
           <top>

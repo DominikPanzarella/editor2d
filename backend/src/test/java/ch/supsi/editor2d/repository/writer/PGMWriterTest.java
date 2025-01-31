@@ -2,6 +2,7 @@ package ch.supsi.editor2d.repository.writer;
 
 import ch.supsi.editor2d.service.model.ImageWrapper;
 import ch.supsi.editor2d.service.model.PGMImageWrapper;
+import ch.supsi.editor2d.service.model.PPMImageWrapper;
 import ch.supsi.editor2d.service.model.PixelWrapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,7 +26,7 @@ public class PGMWriterTest {
                 { new PixelWrapper(0.2f, 0.2f, 0.2f), new PixelWrapper(0.6f, 0.6f, 0.6f), new PixelWrapper(0.8f, 0.8f, 0.8f) },
                 { new PixelWrapper(0.1f, 0.1f, 0.1f), new PixelWrapper(0.3f, 0.3f, 0.3f), new PixelWrapper(0.9f, 0.9f, 0.9f) }
         };
-        image = new PGMImageWrapper(3,3, pixels,15);
+        image = new PPMImageWrapper(3,3, pixels,15);
     }
 
     @Test
@@ -54,7 +55,7 @@ public class PGMWriterTest {
             writer.write(path, extension, image);
         });
 
-        assertEquals("Can't handle this file!", exception.getMessage());
+        assertEquals("File type is not supported", exception.getMessage());
     }
 
     @Test

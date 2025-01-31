@@ -4,6 +4,7 @@ import ch.supsi.editor2d.command.ClearPipelineCommand;
 import ch.supsi.editor2d.command.RedoCommand;
 import ch.supsi.editor2d.command.RunPipelineCommand;
 import ch.supsi.editor2d.command.UndoCommand;
+import ch.supsi.editor2d.contracts.displayable.PipelineDisplayable;
 import ch.supsi.editor2d.contracts.handler.RedoHandler;
 import ch.supsi.editor2d.contracts.handler.UndoHandler;
 import ch.supsi.editor2d.contracts.observer.*;
@@ -27,7 +28,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class PipelineView implements ControlledView, FilterSelectedObserver, ClearPipelineObserver, ToggleUndoButtonObserver, ToggleRedoButtonObserver, ToggleRunButtonsObserver, ToggleEmptyPipelineObserver
+public class PipelineView implements ControlledView, PipelineDisplayable,FilterSelectedObserver, ClearPipelineObserver, ToggleUndoButtonObserver, ToggleRedoButtonObserver, ToggleRunButtonsObserver, ToggleEmptyPipelineObserver
 {
     @FXML
     Label historyLabel;
@@ -94,26 +95,30 @@ public class PipelineView implements ControlledView, FilterSelectedObserver, Cle
         return parent;
     }
 
+    @Override
     public <T extends RunPipelineCommand<? extends RunPipelineReceiver<RunPipelineHandler>>> void createRunPipelineBehaviour(T command){
         runPipelineButton.setOnAction(action->command.execute());
     }
 
-
+    @Override
     public <T extends ClearPipelineCommand<? extends ClearPipelineReceiver<ClearPipelineHandler>>> void createClearPipelineBehaviour(T command){
         deleteButton.setOnAction(action->command.execute());
     }
 
+    @Override
     public <T extends UndoCommand<? extends UndoReceiver<UndoHandler>>> void createUndoBehaviour(T command){
         undoButton.setOnAction(action->command.execute());
     }
 
+    @Override
     public <T extends RedoCommand<? extends RedoReceiver<RedoHandler>>> void createRedoBehaviour(T command){
         redoButton.setOnAction(action->command.execute());
     }
 
     @Override
     public void filterSelected(String filter) {
-        Label filterLabel = new Label(filter);
+        TranslationsController translationsController = TranslationsController.getInstance();
+        Label filterLabel = new Label(translationsController.translate("label."+filter));
 
         // Applica lo stile inline
         filterLabel.setStyle("-fx-background-color: #f1a08e; " +
@@ -139,8 +144,8 @@ public class PipelineView implements ControlledView, FilterSelectedObserver, Cle
     }
 
     @Override
-    public void toggleEmptyPipelineButton() {
-        deleteButton.setDisable(!deleteButton.isDisable());
+    public void toggleEmptyPipelineButton(boolean state) {
+        deleteButton.setDisable(state);
     }
 
     @Override
@@ -149,8 +154,8 @@ public class PipelineView implements ControlledView, FilterSelectedObserver, Cle
     }
 
     @Override
-    public void toggleRunButtons() {
-        runPipelineButton.setDisable(!runPipelineButton.isDisable());
+    public void toggleRunButtons(boolean state) {
+        runPipelineButton.setDisable(state);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package ch.supsi.editor2d.view;
 
 import ch.supsi.editor2d.command.*;
+import ch.supsi.editor2d.contracts.displayable.MenuDisplayable;
 import ch.supsi.editor2d.contracts.handler.*;
 import ch.supsi.editor2d.contracts.observer.*;
 import ch.supsi.editor2d.contracts.receiver.*;
@@ -16,7 +17,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class MenuBarView implements ControlledView, ToggleExportObserver, ToggleRedoButtonObserver, ToggleUndoButtonObserver, ToggleZoomButtonsObserver, ToggleRunButtonsObserver {
+public class MenuBarView implements ControlledView, MenuDisplayable,ToggleExportObserver, ToggleRedoButtonObserver, ToggleUndoButtonObserver, ToggleZoomButtonsObserver, ToggleRunButtonsObserver {
     @FXML
     Menu fileMenu;
     @FXML
@@ -52,7 +53,6 @@ public class MenuBarView implements ControlledView, ToggleExportObserver, Toggle
     MenuItem moreInfoMenuItem;
     private static Parent parent;
 
-
     private static MenuBarView myself;
 
     private MenuBarView(){}
@@ -76,7 +76,6 @@ public class MenuBarView implements ControlledView, ToggleExportObserver, Toggle
         return myself;
     }
 
-
     @Override
     public void initialize() {
         exportMenuItem.setDisable(true);
@@ -87,59 +86,78 @@ public class MenuBarView implements ControlledView, ToggleExportObserver, Toggle
         redoMenuItem.setDisable(true);
     }
 
+    @Override
     public <T extends OpenFileCommand<? extends OpenFileReceiver<OpenFileHandler>>> void createOpenMenuItemBehaviour(T command){
         openMenuItem.setOnAction(action->command.execute());
     }
 
+    @Override
     public <T extends AboutCommand<? extends AboutReceiver<AboutHandler>>> void createAboutBehavior(T command) {
         aboutMenuItem.setOnAction(action -> command.execute());
     }
 
+    @Override
     public <T extends ChangeLanguageCommand<? extends ChangeLanguageReceiver<ChangeLanguageHandler>>> void createEnUSMenuItemBehaviour(T command){
         enUSMenuItem.setOnAction(action->command.execute());
     }
 
+    @Override
     public <T extends ChangeLanguageCommand<? extends ChangeLanguageReceiver<ChangeLanguageHandler>>> void createItCHMenuItemBehaviour(T command){
         itCHMenuItem.setOnAction(action->command.execute());
     }
 
+    @Override
     public <T extends RunPipelineCommand<? extends RunPipelineReceiver<RunPipelineHandler>>> void createRunPipelineBehaviour(T command){
         runPipelineMenuItem.setOnAction(action->command.execute());
     }
 
+    @Override
     public <T extends ZoomOutCommand<? extends ZoomOutReceiver<ZoomOutHandler>>> void createZoomOutBehaviour(T command){
         zoomOutMenuItem.setOnAction(action->command.execute());
     }
 
+    @Override
     public <T extends ZoomInCommand<? extends ZoomInReceiver<ZoomInHandler>>> void createZoomInBehaviour(T command){
         zoomInMenuItem.setOnAction(action->command.execute());
     }
 
+    @Override
     public <T extends ExitCommand<? extends ExitReceiver<ExitHandler>>> void createExitBehaviour(T command){
         exitMenuItem.setOnAction(action->command.execute());
     }
 
+    @Override
     public <T extends ExportFileCommand<? extends ExportFileReceiver<ExportFileHandler>>> void createExportFileBehaviour(T command){
         exportMenuItem.setOnAction(action->command.execute());
     }
 
+    @Override
     public <T extends MoreInfoCommand<? extends MoreInfoReceiver<MoreInfoHandler>>> void createMoreInfoBehaviour(T command){
         moreInfoMenuItem.setOnAction(action->command.execute());
     }
 
+    @Override
+    public <T extends UndoCommand<? extends UndoReceiver<UndoHandler>>> void createUndoBehaviour(T command){
+        undoMenuItem.setOnAction(action->command.execute());
+    }
+
+    @Override
+    public <T extends RedoCommand<? extends RedoReceiver<RedoHandler>>> void createRedoBehaviour(T command){
+        redoMenuItem.setOnAction(action->command.execute());
+    }
 
     public Parent getParent() {
         return parent;
     }
 
     @Override
-    public void toggleExportButton() {
-        exportMenuItem.setDisable(!exportMenuItem.isDisable());
+    public void toggleExportButton(boolean state) {
+        exportMenuItem.setDisable(state);
     }
 
     @Override
     public void toggleRedoButton(boolean state) {
-        redoMenuItem.setDisable(!redoMenuItem.isDisable());
+        redoMenuItem.setDisable(state);
     }
 
     @Override
@@ -148,14 +166,13 @@ public class MenuBarView implements ControlledView, ToggleExportObserver, Toggle
     }
 
     @Override
-    public void toggleZoomButtons() {
-        zoomInMenuItem.setDisable(!zoomInMenuItem.isDisable());
-        zoomOutMenuItem.setDisable(!zoomOutMenuItem.isDisable());
+    public void toggleZoomButtons(boolean state) {
+        zoomInMenuItem.setDisable(state);
+        zoomOutMenuItem.setDisable(state);
     }
 
     @Override
-    public void toggleRunButtons() {
-        runPipelineMenuItem.setDisable(!runPipelineMenuItem.isDisable());
+    public void toggleRunButtons(boolean state) {
+        runPipelineMenuItem.setDisable(state);
     }
-
 }

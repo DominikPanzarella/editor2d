@@ -55,6 +55,6 @@ public class PPMWriterTest {
             writer.write(path, extension, image);
         });
 
-        assertEquals("Can't handle this file!", exception.getMessage());
+        assertEquals("File type is not supported", exception.getMessage());
     }
 }

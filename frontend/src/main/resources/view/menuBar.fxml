@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.control.*?>
 
-<MenuBar xmlns:fx="http://javafx.com/fxml/1">
-    <Menu fx:id="fileMenu" text="File">
+<MenuBar fx:id="menuBar" xmlns:fx="http://javafx.com/fxml/1">
+    <Menu fx:id="fileMenu" text="%label.fileMenu">
         <MenuItem fx:id="openMenuItem" mnemonicParsing="false" text="%label.open"/>
         <MenuItem fx:id="exportMenuItem" mnemonicParsing="false" text="%label.export"/>
         <MenuItem fx:id="exitMenuItem" text="%label.exit" />
     </Menu>
-    <Menu fx:id="editMenu" mnemonicParsing="false" text="Edit">
+    <Menu fx:id="editMenu" mnemonicParsing="false" text="%label.edit">
         <Menu fx:id="changeLanguageMenu" mnemonicParsing="false" text="%label.changeLanguage">
             <MenuItem fx:id="enUSMenuItem" mnemonicParsing="false" text="%label.enUS"/>
             <MenuItem fx:id="itCHMenuItem" mnemonicParsing="false" text="%label.itCH"/>
